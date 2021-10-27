@@ -24,7 +24,8 @@ sudo apt install ansible
 then, clone the directory 
 
 ```bash
-
+cd /tmp
+git clone https://github.com/davidmasp/ansible-presets.git
 ```
 
 and finally run the playbook locally
@@ -34,6 +35,12 @@ ansible-playbook presets.yml --connection=local --ask-become-pass
 ```
 
 ## FAQ
+
+### TMUX 2.9 compatibility
+
+There are 2 tmux conf versions, pre-2.9 and post-2.9.
+
+See [this](https://github.com/tmux/tmux/issues/1689) for more context.
 
 ### Error with conda env active
 
