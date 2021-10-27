@@ -1,0 +1,47 @@
+# User specific aliases and functions
+
+## GENERAL USAGE ##
+## remove savely, will ask for confirmation before rm
+alias rm='rm -i'
+### list in vertical mode
+alias ls="ls -1 --color=auto"
+### list all files (also hidden)
+alias la='ls -a'
+### list all files with info
+alias ll='ls -la'
+### list files with info
+alias l='ls -l'
+### runs htop for the current user
+alias myhtop="htop -u $USER"
+### attach to tmux sessions
+alias ta="tmux attach"
+
+## GIT ##
+# basic
+alias ga='git add'
+alias gst='git status'
+alias gc='git commit'
+# this is when the directory is cluttered and very slow, it only checks 
+# tracked files
+alias guno='git status -uno'
+
+## SLURM ##
+### + info squeue, use -i to make it interactive
+alias watchqueue="squeue --format '%Q %.18i %.9P %.20j %.8u %.8T %.10M %.9l %C %m %R'"
+### list jobs of USER with format, table spaced and sorted by priority
+alias myjobs="squeue --format '%Q %.18i %.9P %.20j %.8u %.8T %.10M %.9l %C %m %R' -u $USER | column -t | sort -r -k1"
+### same as before but not USER (I think sorting dont work)
+alias sjobs="squeue --format '%Q %.18i %.9P %.20j %.8u %.8T %.10M %.9l %C %m %R' | column -t | sort -r -k1"
+### gets info from past jobs 
+alias infojobs="sacct --format=\"JobID,JobName,State,MaxRSSTask,MaxRSS,Timelimit,Elapsed,CPUTime,NCPUS,ReqMem\""
+### sinfo with more format, tells you how many nodes are free 
+alias watchnodes="watch -n 10 \"sinfo -e -O 'NodeHost,CPUsLoad,CPUs,CPUsState,FreeMem,Memory' | column -t\""
+
+alias tableJobs="squeue -O 'Account,State' | egrep -v 'ACCOUNT' | sort -k1 -k2 | uniq -c"
+
+### show info from any job
+alias showjob="scontrol show jobid -dd"
+
+## R ##
+### Build a package from source
+alias buildR="R CMD INSTALL --no-multiarch --with-keep.source"

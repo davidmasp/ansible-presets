@@ -1,0 +1,18 @@
+
+syntax on
+
+" setting up line numbers
+set number
+set numberwidth=1
+
+" su line number and other
+set ruler
+
+" colorscheme definition
+colorscheme desert
+
+" highlight current line
+set cursorline
+
+" highlight matching [{()}]
+set showmatch

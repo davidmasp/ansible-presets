@@ -1,0 +1,59 @@
+---
+- hosts: localhost
+  connection: local
+
+  tasks:
+  - name: install packages
+    become: true # this is to become root
+    package:
+      name:
+        - htop
+        - vim-nox
+        - vim
+        - tmux
+        - dos2unix
+        - neofetch
+
+  - name: copy vim conf file
+    copy:
+      src: dotfiles/vimrc
+      dest: /home/dmas/.vimrc
+      owner: dmas
+      group: dmas
+
+  - name: copy tmux conf file
+    copy:
+      src: dotfiles/tmux_29.conf
+      dest: /home/dmas/.tmux.conf
+      owner: dmas
+      group: dmas
+
+  - name: copy aliases conf file
+    copy:
+      src: dotfiles/bash_aliases
+      dest: /home/dmas/.bash_aliases
+      owner: dmas
+      group: dmas
+
+  - name: Creates projects directory
+    file:
+      path: /home/dmas/projects
+      state: directory
+
+  - name: Creates src directory
+    file:
+      path: /home/dmas/src
+      state: directory
+
+  - name: Creates src directory
+    file:
+      path: /home/dmas/bin
+      state: directory
+
+### other ideas that I am not sure I want to dev yet
+### 1) Install anaconda/miniconda through ansible
+## mkdir home/dmas/src/anaconda
+## https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+## sha256sum Miniconda3-latest-Linux-x86_64.sh
+## then executing (it is interactive, worth it?)
+### 2) download repo of curated self envs
