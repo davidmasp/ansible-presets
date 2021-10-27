@@ -45,3 +45,7 @@ alias showjob="scontrol show jobid -dd"
 ## R ##
 ### Build a package from source
 alias buildR="R CMD INSTALL --no-multiarch --with-keep.source"
+
+### NON ALIAS ####
+# because from the ubuntu bashrc it sources the file directly I think this should just work.
+export PATH="$HOME/bin:$PATH"

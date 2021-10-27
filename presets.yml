@@ -45,10 +45,36 @@
       path: /home/dmas/src
       state: directory
 
-  - name: Creates src directory
+  - name: Creates bin directory
     file:
       path: /home/dmas/bin
       state: directory
+
+  - name: clone custom scripts
+    ansible.builtin.git:
+      repo: 'https://github.com/davidmasp/custom-scripts.git'
+      dest: /home/dmas/src/custom-scripts
+
+  - name: Find all files in CS
+    find:
+      paths: /home/dmas/src/custom-scripts
+      patterns: '*.sh,*.R,*.py'
+    register: customS
+
+  - name: Create symlinks to bin
+    file:
+      src: "{{ item.path }}"
+      path: "/home/dmas/bin/{{ item.path | basename }}"
+      state: link
+    with_items: "{{ customS.files }}"
+
+  - name: adds du usage cron job
+    ansible.builtin.cron:
+      name: "disk usage check"
+      minute: "32"
+      hour: "23"
+      weekday: "6"
+      job: "/home/dmas/bin/du_command.sh -t /home/dmas -o /home/dmas/.du_reports -d 2 -n 20"
 
 ### other ideas that I am not sure I want to dev yet
 ### 1) Install anaconda/miniconda through ansible
