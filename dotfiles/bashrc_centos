@@ -1,0 +1,24 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# include server specific .bashrc if it exists
+HOSTNA=$(hostname)
+if [ -f $HOME/.bashrc_${HOSTNA} ]; then
+    . $HOME/.bashrc_${HOSTNA}
+fi
+
+# change the prompt!
+# filezila crashes if not like this
+if [ "$SSH_TTY" ]
+then
+   export PS1="\n\[\033[0;93m\]\u\[\033[0m\]@\h [$CONDA_DEFAULT_ENV] \w \A \n\[\033[93m\]>\[\033[0m\]\[\033[0;97m\]>\[\033[0m\]\[\033[0;93m\]>\[\033[0m\] "
+fi
+
+### ALIASES ###
+if [ -f ~/.aliases ]; then
+    . ~/.aliases
+fi
