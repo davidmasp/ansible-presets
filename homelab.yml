@@ -17,8 +17,10 @@
         - gnupg
         - lsb-release
   - name: Add an apt key by id from a keyserver
-    apt_key:
+    become: true
+    ansible.builtin.apt_key:
       url: https://download.docker.com/linux/ubuntu/gpg
+      file: /usr/share/keyrings/docker-archive-keyring.gpg
       state: present
   - name: add apt repo
     apt_repository:
