@@ -20,6 +20,7 @@
         - tmux
         - dos2unix
         - neofetch
+        - net-tools
 
   - name: copy vim conf file
     copy:

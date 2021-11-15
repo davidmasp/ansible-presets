@@ -20,20 +20,37 @@
     become: true
     ansible.builtin.apt_key:
       url: https://download.docker.com/linux/ubuntu/gpg
-      file: /usr/share/keyrings/docker-archive-keyring.gpg
+      keyring: /usr/share/keyrings/docker-archive-keyring.gpg
       state: present
+  - name: get the arch
+    shell: dpkg --print-architecture
+    register: dArch
   - name: add apt repo
     become: true
     apt_repository:
-      repo: deb [arch={{ ansible_architecture }} signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable
+      repo: deb [arch={{dArch.stdout}} signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable
       state: present
-  - name: install docker
+  - name: Update and upgrade apt packages again
     become: true
-    package:
-      name:
-        - docker-ce
-        - docker-ce-cli
-        - containerd.io
+    apt:
+      upgrade: yes
+      update_cache: yes
+      cache_valid_time: 8
+  - name: install docker-ce
+    become: true
+    apt:
+      name: docker-ce
+      update_cache: yes
+  - name: install docker-ce-cli
+    become: true
+    apt:
+      name: docker-ce-cli
+      update_cache: yes
+  - name: install container
+    become: true
+    apt:
+      name: containerd.io
+      update_cache: yes
   - name: Register vars 1
     shell: uname -s
     register: unameS
@@ -41,8 +58,8 @@
     shell: uname -m
     register: unameM
   - name: install docker compose
-    become: true
     get_url: 
       url : https://github.com/docker/compose/releases/download/1.29.2/docker-compose-{{ unameS.stdout }}-{{ unameM.stdout }}
-      dest: /usr/local/bin/docker-compose
+      dest: /home/dmas/bin/docker-compose
       mode: 'u+x,g+x'
+
