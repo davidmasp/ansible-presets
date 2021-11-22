@@ -1,0 +1,45 @@
+---
+- hosts: localhost
+  connection: local
+  tasks: # https://stackoverflow.com/questions/41535838
+  - name: Update and upgrade apt packages 
+    become: true
+    apt:
+      upgrade: 'yes' ## see https://serverfault.com/a/993211
+      update_cache: yes
+      cache_valid_time: 86400 #One day
+  - name: install helper packages we need
+    become: true # this is to become root
+    apt:
+      install_recommends: no 
+      pkg:
+        - software-properties-common
+        - dirmngr
+  # wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | sudo tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
+  - name: Add an Apt signing key, will not download if present
+    become: true
+    ansible.builtin.apt_key:
+      id: E084DAB9
+      url: https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc
+      # if I set up the key ring does not work...
+      # keyring: /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
+      state: present
+  - name: R 4.0 repo from CRAN 
+    become: true
+    ansible.builtin.apt_repository:
+      repo: deb https://cloud.r-project.org/bin/linux/ubuntu {{ansible_distribution_release}}-cran40/
+      state: present
+  - name: install r-base
+    become: true # this is to become root
+    apt:
+      install_recommends: no 
+      pkg:
+        - r-base
+        - r-base-dev
+  - name: install tidy deps
+    become: true
+    apt:
+      pkg:
+        - libcurl4-openssl-dev
+        - libssl-dev
+        - libxml2-dev
