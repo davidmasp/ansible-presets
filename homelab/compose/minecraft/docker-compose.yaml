@@ -1,0 +1,19 @@
+version: '3'
+services:
+  minecraft:
+    image: "itzg/minecraft-server:latest"
+    environment:
+      - "EULA=TRUE"
+      - "DIFFICULTY=${DIFFICULTY}"
+      - "WHITELIST=${WHITELIST}"
+      - "MAX_PLAYERS=${MAX_PLAYERS}"
+      - "SEED=${SEED}"
+      - "MEMORY=3G"
+      - "VIEW_DISTANCE=20"
+      - "ONLINE=TRUE"
+      - 'MOTD="${MOTD}"'
+    volumes:
+      - ${LOCAL_DIR}:/data
+    ports:
+      - "${PORT_HOST}:25565"
+    restart: "unless-stopped"
